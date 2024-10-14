@@ -50,7 +50,6 @@ coverage.xml
 
 # Heroku specific
 *.env
-Procfile
 
 # Node.js specific files (if you decide to add Node.js)
 node_modules/
