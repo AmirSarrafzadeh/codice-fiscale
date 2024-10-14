@@ -21,13 +21,15 @@ load_dotenv(dotenv_path=env_path)
 mongodb = os.getenv("MONGO_URI")
 
 app = FastAPI()
-templates = Jinja2Templates(directory="../templates")
-app.mount("/static", StaticFiles(directory="../static"), name="static")
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+templates = Jinja2Templates(directory=os.path.join(BASE_DIR, "templates"))
+app.mount("/static", StaticFiles(directory=os.path.join(BASE_DIR, "static")), name="static")
 
 # MongoDB connection setup
 client = MongoClient(mongodb)
 db = client["user_data"]
 collection = db["users"]
+
 
 # CORS middleware configuration
 origins = [
