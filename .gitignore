@@ -1,0 +1,65 @@
+# Python specific files
+*.pyc
+__pycache__/
+*.pyo
+*.pyd
+*.env
+
+# Virtual environment
+venv/
+cfvenv/
+env/
+ENV/
+.venv/
+.pyenv/
+.Python
+.ini
+
+# FastAPI specific files
+*.db
+*.sqlite3
+
+# Static files
+staticfiles/
+media/
+
+# Logs
+*.log
+*.log.*
+*.ini
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+coverage.xml
+*.cover
+*.py,cover
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints
+
+# Editor settings and metadata
+.idea/
+.vscode/
+*.swp
+*~
+*.swo
+.DS_Store
+
+# Heroku specific
+*.env
+Procfile
+
+# Node.js specific files (if you decide to add Node.js)
+node_modules/
+
+# Docker specific files
+docker-compose.yml
+Dockerfile
+.dockerignore
+
+# Operating system generated files
+Thumbs.db
+Desktop.ini
