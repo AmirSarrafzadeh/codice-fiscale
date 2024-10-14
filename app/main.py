@@ -21,7 +21,7 @@ load_dotenv(dotenv_path=env_path)
 mongodb = os.getenv("MONGO_URI")
 
 app = FastAPI()
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+BASE_DIR = os.path.dirname(os.path.abspath(__file__)).split("app")[0]
 templates = Jinja2Templates(directory=os.path.join(BASE_DIR, "templates"))
 app.mount("/static", StaticFiles(directory=os.path.join(BASE_DIR, "static")), name="static")
 
