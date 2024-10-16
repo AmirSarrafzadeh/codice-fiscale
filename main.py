@@ -11,7 +11,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi import FastAPI, HTTPException, Request
 
 # create a logger with the name app.log and set the logging level to INFO
-logging.basicConfig(filename="app/app.log", level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(filename="app.log", level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 
 # load the env file
 env_path = os.path.join(os.path.dirname(__file__), '.env')
