@@ -45,5 +45,6 @@ document.getElementById('cfForm').addEventListener('submit', async function(e) {
         body: JSON.stringify(formData)
     });
     const result = await response.json();
-    document.getElementById('cfResult').innerText = `Codice Fiscale: ${result.codiceFiscale}`;
+    debugger;
+    document.getElementById('cfResult').innerText = `Codice Fiscale: ${result.codice_fiscale}`;
 });

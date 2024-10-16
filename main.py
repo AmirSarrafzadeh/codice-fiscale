@@ -111,10 +111,9 @@ def process_day_and_sex(day, sex):
 
 # Placeholder for place of birth code (requires ISTAT codes for Italian towns)
 def process_place_of_birth(country_of_birth):
-    istat = json.load(open("static/ISTAT.json"))
-    for item in istat.keys():
-        if country_of_birth.lower() in str(item):
-            return istat[item]
+    istat = json.load(open("static/all_ISTAT.json"))
+    if country_of_birth.lower() in istat:
+        return istat[country_of_birth.lower()]
     return "Z000"
 
 def calculate_check_character(codice):
@@ -195,24 +194,34 @@ def generate_codice_fiscale(data: UserInput):
 
 @app.get("/")
 async def read_root(request: Request):
-    return templates.TemplateResponse("codice_fiscale.html", {"request": request, "message": "Hello World"})
+    return templates.TemplateResponse("index.html", {"request": request})
 
+@app.get("/codice_fiscale")
+async def codice_fiscale_page(request: Request):
+    return templates.TemplateResponse("codice_fiscale.html", {"request": request})
 
+@app.get("/age_calculator")
+async def age_calculator_page(request: Request):
+    return templates.TemplateResponse("age_calculator.html", {"request": request})
 
 @app.post("/generate_cf")
 async def generate_cf(user: UserInput):
     # Check if user data already exists
+    logging.info(f"Checking if user data already exists: {user}")
     existing_user = collection.find_one({
-        "surname": user.surname,
         "name": user.name,
+        "surname": user.surname,
         "day": user.day,
         "month": user.month,
-        "year": user.year
+        "year": user.year,
+        "sex": user.sex,
+        "placeOfBirth": user.placeOfBirth
     })
+    logging.info(f"Existing user data: {existing_user}")
 
     if existing_user:
         codice_fiscale = existing_user['codice_fiscale']
-        return {"codiceFiscale exist": codice_fiscale}
+        return {"codice_fiscale": codice_fiscale}
 
     # Generate codice fiscale
     codice_fiscale = generate_codice_fiscale(user)
@@ -228,4 +237,4 @@ async def generate_cf(user: UserInput):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to insert data into MongoDB: {str(e)}")
 
-    return {"codiceFiscale": codice_fiscale}
+    return {"codice_fiscale": codice_fiscale}
