@@ -153,6 +153,29 @@ def calculate_check_character(codice):
 
 
 def generate_codice_fiscale(data: UserInput):
+    # check all the parameters are not empty
+    # The name and surname must be string
+    # The day must be string and between 1 and 31
+    # The month must be string and between 1 and 12
+    # The year must be string and between 1900 and 2024
+    # The Sex must be string and Male or Female
+    # The place of birth must be string
+
+    if not data.name or not data.surname or not data.day or not data.month or not data.year or not data.sex or not data.placeOfBirth:
+        raise HTTPException(status_code=400, detail="All fields are required")
+    if not isinstance(data.name, str) or not isinstance(data.surname, str):
+        raise HTTPException(status_code=400, detail="Name and surname must be string")
+    if not isinstance(data.day, str) or not 1 <= int(data.day) <= 31:
+        raise HTTPException(status_code=400, detail="Day must be a string between 1 and 31")
+    if not isinstance(data.month, str) or data.month not in month_mapping.keys():
+        raise HTTPException(status_code=400, detail="Month must be a string among January to December")
+    if not isinstance(data.year, str) or not 1900 <= int(data.year) <= 2024:
+        raise HTTPException(status_code=400, detail="Year must be a string between 1900 to 2024")
+    if not isinstance(data.sex, str) or (data.sex.upper() not in ["MALE", "FEMALE"]):
+        raise HTTPException(status_code=400, detail="Sex must be a string and one of the Male or Female")
+    if not isinstance(data.placeOfBirth, str):
+        raise HTTPException(status_code=400, detail="Place of birth must be a string")
+
     name_part = "".join(process_name(data.name))
     surname_part = "".join(process_surname(data.surname))
     year_part = process_year(data.year)
@@ -206,4 +229,3 @@ async def generate_cf(user: UserInput):
         raise HTTPException(status_code=500, detail=f"Failed to insert data into MongoDB: {str(e)}")
 
     return {"codiceFiscale": codice_fiscale}
-
