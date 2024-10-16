@@ -1,32 +1,21 @@
 import os
 import json
-import socks
-import socket
 import logging
 import uvicorn
 from pydantic import BaseModel
 from dotenv import load_dotenv
 from pymongo import MongoClient
-from urllib.parse import urlparse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import FastAPI, HTTPException, Request
 
 # create a logger with the name app.log and set the logging level to INFO
-logging.basicConfig(filename="app.log", level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(filename="app.log", level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 # load the env file
 env_path = os.path.join(os.path.dirname(__file__), '.env')
 load_dotenv(dotenv_path=env_path)
-
-qg_url = os.getenv('QUOTAGUARDSTATIC_URL')
-if qg_url:
-    print(f"Using QuotaGuard Static IP: {qg_url}")
-    parsed = urlparse(qg_url)
-    ip, port = parsed.hostname, parsed.port
-    socks.set_default_proxy(socks.SOCKS5, ip, port)
-    socket.socket = socks.socksocket
 
 # Accessing data
 mongodb = os.getenv("MONGO_URI")
