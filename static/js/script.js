@@ -12,7 +12,7 @@ const monthSelect = document.getElementById('month');
 const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 months.forEach((month, index) => {
     const option = document.createElement('option');
-    option.value = index + 1;  // month index starts from 1 for January
+    option.value = index + 1;
     option.text = month;
     monthSelect.appendChild(option);
 });

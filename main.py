@@ -195,7 +195,7 @@ def generate_codice_fiscale(data: UserInput):
 
 @app.get("/")
 async def read_root(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request, "message": "Hello World"})
+    return templates.TemplateResponse("codice_fiscale.html", {"request": request, "message": "Hello World"})
 
 
 
