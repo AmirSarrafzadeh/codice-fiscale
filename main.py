@@ -11,7 +11,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi import FastAPI, HTTPException, Request
 
 # create a logger with the name app.log and set the logging level to INFO
-logging.basicConfig(filename="app.log", level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(filename="app/app.log", level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 
 # load the env file
 env_path = os.path.join(os.path.dirname(__file__), '.env')
@@ -111,7 +111,7 @@ def process_day_and_sex(day, sex):
 
 # Placeholder for place of birth code (requires ISTAT codes for Italian towns)
 def process_place_of_birth(country_of_birth):
-    istat = json.load(open("../static/istat.json"))
+    istat = json.load(open("static/ISTAT.json"))
     for item in istat.keys():
         if country_of_birth.lower() in str(item):
             return istat[item]
@@ -207,6 +207,3 @@ async def generate_cf(user: UserInput):
 
     return {"codiceFiscale": codice_fiscale}
 
-
-# if __name__ == "__main__":
-#     uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=True)
