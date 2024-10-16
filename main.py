@@ -52,8 +52,8 @@ if not mongodb:
 
 # Pydantic model for user input
 class UserInput(BaseModel):
-    surname: str
     name: str
+    surname: str
     day: str
     month: str
     year: str
@@ -153,8 +153,8 @@ def calculate_check_character(codice):
 
 
 def generate_codice_fiscale(data: UserInput):
-    surname_part = "".join(process_surname(data.surname))
     name_part = "".join(process_name(data.name))
+    surname_part = "".join(process_surname(data.surname))
     year_part = process_year(data.year)
     month_part = process_month(data.month)
     day_sex_part = process_day_and_sex(data.day, data.sex)
