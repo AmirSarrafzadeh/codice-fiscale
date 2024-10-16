@@ -31,8 +31,8 @@ for (let year = currentYear; year >= 1900; year--) {
 document.getElementById('cfForm').addEventListener('submit', async function(e) {
     e.preventDefault();
     const formData = {
-        surname: document.getElementById('surname').value,
         name: document.getElementById('name').value,
+        surname: document.getElementById('surname').value,
         day: document.getElementById('day').value,
         month: document.getElementById('month').value,
         year: document.getElementById('year').value,
