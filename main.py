@@ -10,6 +10,9 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import FastAPI, HTTPException, Request
+import json
+from huggingface_hub import InferenceClient
+
 
 # create a logger with the name app.log and set the logging level to INFO
 logging.basicConfig(filename="app.log", level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -22,11 +25,34 @@ geolocator = Nominatim(user_agent="city_to_country")
 
 # Accessing data
 mongodb = os.getenv("MONGO_URI")
+HF_API_TOKEN = os.getenv("HF_TOKEN")
 
 app = FastAPI()
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 templates = Jinja2Templates(directory=os.path.join(BASE_DIR, "templates"))
 app.mount("/static", StaticFiles(directory=os.path.join(BASE_DIR, "static")), name="static")
+
+repo_id = "microsoft/Phi-3-mini-4k-instruct"
+
+
+llm_client = InferenceClient(
+    model=repo_id,
+    timeout=120,
+    token=HF_API_TOKEN
+)
+
+
+def call_llm(inference_client: InferenceClient, prompt: str):
+    response = inference_client.post(
+        json={
+            "inputs": prompt,
+            "parameters": {
+                "max_new_tokens": 100
+            }
+        },
+    )
+    return response
+
 
 # MongoDB connection setup
 client = MongoClient(mongodb)
@@ -260,11 +286,16 @@ async def generate_cf(user: UserInput):
 @app.post("/chatbot")
 async def chatbot_interaction(chat: ChatMessage):
     user_message = chat.message.lower()
+    response = call_llm(llm_client, user_message)
+    try:
+        if response:
+            decoded_response = json.loads(response)
+            if len(decoded_response) > 0:
+                if "generated_text" in decoded_response[0]:
+                    return decoded_response[0]["generated_text"].split(user_message)[1]
+    except Exception as e:
+        logging.error(f"Error in decoding response: {str(e)}")
+        return "Sorry, I didn't understand that. Can you please rephrase?"
+    return "Sorry, I didn't understand that. Can you please rephrase?"
 
-    # Example logic for responding to user input
-    if "hello" in user_message:
-        return {"response": "Hi! How can I assist you today?"}
-    elif "help" in user_message:
-        return {"response": "Sure! Let me know what you need help with."}
-    else:
-        return {"response": "Sorry, I didn't understand that. Can you please rephrase?"}
+
