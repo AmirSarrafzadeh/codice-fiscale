@@ -33,7 +33,6 @@ client = MongoClient(mongodb)
 db = client["user_data"]
 collection = db["users"]
 
-
 # CORS middleware configuration
 origins = [
     "http://localhost:8000",
@@ -48,7 +47,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
 if not mongodb:
     raise Exception("MONGO_URI is not set. Please check the .env file.")
 
@@ -62,6 +60,11 @@ class UserInput(BaseModel):
     year: str
     sex: str
     placeOfBirth: str
+
+
+# Pydantic model for chatbot interaction
+class ChatMessage(BaseModel):
+    message: str
 
 
 # Month mapping for Codice Fiscale
@@ -152,7 +155,7 @@ def calculate_check_character(codice):
     for index, char in enumerate(codice):
         if (index + 1) % 2 == 0:  # Even index (odd position in human terms)
             total += even_values[char]
-        else:                     # Odd index (even position in human terms)
+        else:  # Odd index (even position in human terms)
             total += odd_values[char]
 
     # Determine the check character from the sum
@@ -206,13 +209,16 @@ def generate_codice_fiscale(data: UserInput):
 async def read_root(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
+
 @app.get("/codice_fiscale")
 async def codice_fiscale_page(request: Request):
     return templates.TemplateResponse("codice_fiscale.html", {"request": request})
 
+
 @app.get("/age_calculator")
 async def age_calculator_page(request: Request):
     return templates.TemplateResponse("age_calculator.html", {"request": request})
+
 
 @app.post("/generate_cf")
 async def generate_cf(user: UserInput):
@@ -248,3 +254,17 @@ async def generate_cf(user: UserInput):
         raise HTTPException(status_code=500, detail=f"Failed to insert data into MongoDB: {str(e)}")
 
     return {"codice_fiscale": codice_fiscale}
+
+
+# A simple endpoint that responds to chatbot messages
+@app.post("/chatbot")
+async def chatbot_interaction(chat: ChatMessage):
+    user_message = chat.message.lower()
+
+    # Example logic for responding to user input
+    if "hello" in user_message:
+        return {"response": "Hi! How can I assist you today?"}
+    elif "help" in user_message:
+        return {"response": "Sure! Let me know what you need help with."}
+    else:
+        return {"response": "Sorry, I didn't understand that. Can you please rephrase?"}

@@ -5,109 +5,49 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Web Application</title>
     <link rel="stylesheet" href="../static/css/styles.css">
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-image: url('../static/images/home.jpg');
-            background-position: center;
-            background-size: cover;
-            color: #333;
-            margin: 0;
-            padding: 0;
-        }
-        nav {
-            background-color: rgba(0, 0, 0, 0.8);
-            padding: 10px;
-            text-align: center;
-        }
-        nav ul {
-            list-style-type: none;
-            padding: 0;
-            margin: 0;
-            display: inline-block;
-        }
-        nav ul li {
-            display: inline;
-            margin-right: 15px;
-        }
-        nav ul li a {
-            color: white;
-            text-decoration: none;
-            font-size: 18px;
-            font-weight: bold;
-        }
-        nav ul li a:hover {
-            color: #ffcc00;
-        }
-        .content {
-            text-align: center;
-            padding: 50px 20px;
-            background: rgba(255, 255, 255, 0.8);
-            max-width: 900px;
-            margin: 50px auto;
-            border-radius: 10px;
-            box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
-        }
-        .content h1 {
-            font-size: 36px;
-            margin-bottom: 20px;
-            color: #0066cc;
-            text-shadow: 2px 2px #ffcc00;
-        }
-        .content p {
-            font-size: 18px;
-            line-height: 1.6;
-            margin-bottom: 20px;
-        }
-        .buttons {
-            margin-top: 20px;
-        }
-        .buttons a {
-            background-color: #0066cc;
-            color: white;
-            padding: 10px 20px;
-            text-decoration: none;
-            border-radius: 5px;
-            transition: background-color 0.3s ease;
-            font-size: 18px;
-        }
-        .buttons a:hover {
-            background-color: #ffcc00;
-            color: black;
-        }
-        footer {
-            text-align: center;
-            padding: 20px;
-            background-color: rgba(0, 0, 0, 0.8);
-            color: white;
-            position: fixed;
-            width: 100%;
-            bottom: 0;
-        }
-    </style>
 </head>
 <body>
-    <nav>
-        <ul class="tabs">
-            <li><a href="/">Home</a></li>
-            <li><a href="/codice_fiscale">Codice Fiscale</a></li>
-            <li><a href="/age_calculator">Age Calculator</a></li>
-            <li><a href="https://www.linkedin.com/in/amir-sarrafzadeh/" target="_blank">My LinkedIn</a></li>
-            <li><a href="https://github.com/AmirSarrafzadeh" target="_blank">My GitHub</a></li>
-        </ul>
-    </nav>
-    <div class="content">
+<nav>
+    <ul class="tabs">
+        <li><a href="/">Home</a></li>
+        <li><a href="/codice_fiscale">Codice Fiscale</a></li>
+        <li><a href="/age_calculator">Age Calculator</a></li>
+        <li><a href="https://www.linkedin.com/in/amir-sarrafzadeh/" target="_blank">My LinkedIn</a></li>
+        <li><a href="https://github.com/AmirSarrafzadeh" target="_blank">My GitHub</a></li>
+    </ul>
+</nav>
+<div class="home-content">
     <h1>Welcome to My Web Tool Hub!</h1>
-    <p>This web application is a collection of simple tools I built as part of my hobbies to learn new technologies. While they might not be life-changing, they are fun and practical, and who knows, you might find them helpful!</p>
-    <p>I developed these tools to explore different tech stacks and sharpen my skills. Whether you're curious about how to generate a <strong>Codice Fiscale</strong>, <strong>calculate your exact age</strong>, or <strong>find the distance between two places</strong>, this app has got you covered.</p>
-    <p>Feel free to play around with the tools, and if they prove useful, that's just an added bonus! Thanks for stopping by and helping me grow as a developer!</p>
+    <p>This web application is a collection of simple tools I built as part of my hobbies to learn new technologies.
+        While they might not be life-changing, they are fun and practical, and who knows, you might find them
+        helpful!</p>
+    <p>I developed these tools to explore different tech stacks and sharpen my skills. Whether you're curious about how
+        to generate a <strong>Codice Fiscale</strong>, <strong>calculate your exact age</strong>, or <strong>find the
+            distance between two places</strong>, this app has got you covered.</p>
+    <p>Feel free to play around with the tools, and if they prove useful, that's just an added bonus! Thanks for
+        stopping by and helping me grow as a developer!</p>
     <div class="buttons">
         <a href="/codice_fiscale">Try Codice Fiscale Tool</a>
         <a href="/age_calculator">Calculate Your Age</a>
     </div>
 </div>
-    <footer>
-        <p>&copy; 2024 Amir Sarrafzadeh | All rights reserved</p>
-    </footer>
+<div id="chatbot-container" class="chatbot">
+    <div id="chatbot-header">
+        <p>Chat with us!</p>
+        <button id="minimize-chatbot" style="float: right; cursor: pointer;" onclick="minimizeChatbot()">-</button>
+    </div>
+    <div id="chatbot-body">
+        <p>Hello! How can I help you today?</p>
+    </div>
+    <div id="chatbot-input">
+        <input type="text" id="userMessage" placeholder="Type your message..."/>
+        <button id="sendMessage" onclick="sendMessage()">Send</button>
+    </div>
+</div>
+<button id="open-chatbot" onclick="openChatbot()">Chat</button>
+<footer>
+    <p>&copy; 2024 Amir Sarrafzadeh | All rights reserved</p>
+</footer>
+<script src="../static/js/script.js"></script>
 </body>
 </html>
