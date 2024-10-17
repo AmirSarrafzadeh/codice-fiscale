@@ -5,6 +5,7 @@ import uvicorn
 from pydantic import BaseModel
 from dotenv import load_dotenv
 from pymongo import MongoClient
+from geopy.geocoders import Nominatim
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi.middleware.cors import CORSMiddleware
@@ -16,6 +17,8 @@ logging.basicConfig(filename="app.log", level=logging.INFO, format='%(asctime)s 
 # load the env file
 env_path = os.path.join(os.path.dirname(__file__), '.env')
 load_dotenv(dotenv_path=env_path)
+
+geolocator = Nominatim(user_agent="city_to_country")
 
 # Accessing data
 mongodb = os.getenv("MONGO_URI")
@@ -110,11 +113,18 @@ def process_day_and_sex(day, sex):
 
 
 # Placeholder for place of birth code (requires ISTAT codes for Italian towns)
-def process_place_of_birth(country_of_birth):
+def process_place_of_birth(city_of_birth):
     istat = json.load(open("static/all_ISTAT.json"))
-    if country_of_birth.lower() in istat:
-        return istat[country_of_birth.lower()]
+    location = geolocator.geocode(city_of_birth, language="en")
+    if location:
+        country = location.address.split(',')[-1].strip().lower()
+        if country in istat.keys() or city_of_birth.lower() in istat.keys():
+            if country == "italy":
+                return istat[city_of_birth.lower()]
+            else:
+                return istat[country]
     return "Z000"
+
 
 def calculate_check_character(codice):
     # Values for characters in odd positions (1, 3, 5, ..., 15)
